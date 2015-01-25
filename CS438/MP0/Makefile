@@ -1,16 +1,18 @@
+CC=gcc
+
 all: client server talker listener
 
-client:
-	gcc -o client client.c
+client: client.c
+	$(CC) -o client client.c
 
-server:
-	gcc -o server server.c
+server: server.c
+	$(CC) -o server server.c
 
-talker:
-	gcc -o talker talker.c
+talker: talker.c
+	$(CC) -o talker talker.c
 
-listener:
-	gcc -o listener listener.c
+listener: listener.c
+	$(CC) -o listener listener.c
 
 .PHONY: clean
 

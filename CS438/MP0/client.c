@@ -14,7 +14,7 @@
 
 #include <arpa/inet.h>
 
-#define PORT "3490" // the port client will be connecting to
+#define PORT "5900" // the port client will be connecting to
 
 #define MAXDATASIZE 100 // max number of bytes we can get at once
 
@@ -78,14 +78,59 @@ int main(int argc, char *argv[])
 
     freeaddrinfo(servinfo); // all done with this structure
 
+    strcpy(buf, "HELO\n\0");
+    printf("c: %s", buf);
+    if ((numbytes = send(sockfd, buf, strlen(buf), 0)) == -1) {
+        perror("send");
+        exit(1);
+    }
     if ((numbytes = recv(sockfd, buf, MAXDATASIZE-1, 0)) == -1) {
         perror("recv");
         exit(1);
     }
-
     buf[numbytes] = '\0';
+    printf("s: %s", buf);
 
-    printf("client: received '%s'\n",buf);
+    strcpy(buf, "USERNAME swang234\n\0");
+    printf("c: %s", buf);
+    if ((numbytes = send(sockfd, buf, strlen(buf), 0)) == -1) {
+        perror("send");
+        exit(1);
+    }
+    if ((numbytes = recv(sockfd, buf, MAXDATASIZE-1, 0)) == -1) {
+        perror("recv");
+        exit(1);
+    }
+    buf[numbytes] = '\0';
+    printf("s: %s", buf);
+
+    for (int i = 0; i < 10; i ++) {
+        strcpy(buf, "RECV\n\0");
+        printf("c: %s", buf);
+        if ((numbytes = send(sockfd, buf, strlen(buf), 0)) == -1) {
+            perror("send");
+            exit(1);
+        }
+        if ((numbytes = recv(sockfd, buf, MAXDATASIZE-1, 0)) == -1) {
+            perror("recv");
+            exit(1);
+        }
+        buf[numbytes] = '\0';
+        printf("s: %s", buf);
+    }
+
+    strcpy(buf, "BYE\n\0");
+    printf("c: %s", buf);
+    if ((numbytes = send(sockfd, buf, strlen(buf), 0)) == -1) {
+        perror("send");
+        exit(1);
+    }
+    if ((numbytes = recv(sockfd, buf, MAXDATASIZE-1, 0)) == -1) {
+        perror("recv");
+        exit(1);
+    }
+    buf[numbytes] = '\0';
+    printf("s: %s", buf);
 
     close(sockfd);
 
