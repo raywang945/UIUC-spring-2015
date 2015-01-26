@@ -1,7 +1,3 @@
-/*
-** client.c -- a stream socket client demo
-*/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -13,8 +9,6 @@
 #include <sys/socket.h>
 
 #include <arpa/inet.h>
-
-/*#define PORT "5900" // the port client will be connecting to*/
 
 #define MAXDATASIZE 100 // max number of bytes we can get at once
 
