@@ -1,20 +1,11 @@
 CC=gcc
 
-all: client server talker listener
+all: mp0client
 
-client: client.c
-	$(CC) -o client client.c
-
-server: server.c
-	$(CC) -o server server.c
-
-talker: talker.c
-	$(CC) -o talker talker.c
-
-listener: listener.c
-	$(CC) -o listener listener.c
+mp0client: mp0client.c
+	$(CC) -o mp0client mp0client.c
 
 .PHONY: clean
 
 clean:
-	rm client server talker listener
+	rm mp0client

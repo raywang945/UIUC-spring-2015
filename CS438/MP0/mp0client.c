@@ -14,7 +14,7 @@
 
 #include <arpa/inet.h>
 
-#define PORT "5900" // the port client will be connecting to
+/*#define PORT "5900" // the port client will be connecting to*/
 
 #define MAXDATASIZE 100 // max number of bytes we can get at once
 
@@ -30,14 +30,14 @@ void *get_in_addr(struct sockaddr *sa)
 
 int main(int argc, char *argv[])
 {
-    int sockfd, numbytes;
+    int sockfd, numbytes, i;
     char buf[MAXDATASIZE];
     struct addrinfo hints, *servinfo, *p;
     int rv;
     char s[INET6_ADDRSTRLEN];
 
-    if (argc != 2) {
-        fprintf(stderr,"usage: client hostname\n");
+    if (argc != 4) {
+        fprintf(stderr,"usage: mp0client hostname port username\n");
         exit(1);
     }
 
@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
     hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = SOCK_STREAM;
 
-    if ((rv = getaddrinfo(argv[1], PORT, &hints, &servinfo)) != 0) {
+    if ((rv = getaddrinfo(argv[1], argv[2], &hints, &servinfo)) != 0) {
         fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
         return 1;
     }
@@ -91,7 +91,9 @@ int main(int argc, char *argv[])
     buf[numbytes] = '\0';
     printf("s: %s", buf);
 
-    strcpy(buf, "USERNAME swang234\n\0");
+    strcpy(buf, "USERNAME ");
+    strcpy(buf + 9, argv[3]);
+    strcpy(buf + 9 + strlen(argv[3]), "\n\0");
     printf("c: %s", buf);
     if ((numbytes = send(sockfd, buf, strlen(buf), 0)) == -1) {
         perror("send");
@@ -104,7 +106,7 @@ int main(int argc, char *argv[])
     buf[numbytes] = '\0';
     printf("s: %s", buf);
 
-    for (int i = 0; i < 10; i ++) {
+    for (i = 0; i < 10; i ++) {
         strcpy(buf, "RECV\n\0");
         printf("c: %s", buf);
         if ((numbytes = send(sockfd, buf, strlen(buf), 0)) == -1) {
