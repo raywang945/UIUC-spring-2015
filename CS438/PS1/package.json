@@ -1,0 +1,14 @@
+{
+  "name": "PS1",
+  "version": "0.0.0",
+  "description": "PS1 latex pdf",
+  "author": "raywang945 <raywang945@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "coffee-script": "^1.8.0",
+    "gulp": "^3.8.10",
+    "gulp-clean": "^0.3.1",
+    "gulp-server-livereload": "^1.0.2",
+    "gulp-shell": "^0.2.11"
+  }
+}
