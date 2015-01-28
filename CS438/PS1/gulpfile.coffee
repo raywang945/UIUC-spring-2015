@@ -1,6 +1,5 @@
 gulp   = require 'gulp'
 shell  = require 'gulp-shell'
-server = require 'gulp-server-livereload'
 clean  = require 'gulp-clean'
 
 gulp.task 'tex', ->
@@ -9,20 +8,11 @@ gulp.task 'tex', ->
             'pdflatex -output-directory build <%= file.path %>'
         ])
 
-gulp.task 'server', ->
-    gulp.src('build')
-        .pipe(server(
-            livereload: false
-            directoryListing: false
-            open: false
-            port: 1234
-        ))
-
 gulp.task 'clean', ->
     gulp.src('build/*', read: false)
         .pipe(clean())
 
-gulp.task 'watch', ['tex', 'server'], ->
+gulp.task 'watch', ['tex'], ->
     gulp.watch('tex/*.tex', ['tex'])
 
 gulp.task 'default', ['tex']
