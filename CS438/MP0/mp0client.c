@@ -83,8 +83,8 @@ int main(int argc, char *argv[])
     buf[numbytes] = '\0';
 
     strcpy(buf, "USERNAME ");
-    strcpy(buf + 9, argv[3]);
-    strcpy(buf + 9 + strlen(argv[3]), "\n\0");
+    strcat(buf, argv[3]);
+    strcat(buf, "\n\0");
     if ((numbytes = send(sockfd, buf, strlen(buf), 0)) == -1) {
         perror("send");
         exit(1);
