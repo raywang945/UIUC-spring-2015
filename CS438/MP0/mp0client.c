@@ -68,12 +68,10 @@ int main(int argc, char *argv[])
 
     inet_ntop(p->ai_family, get_in_addr((struct sockaddr *)p->ai_addr),
             s, sizeof s);
-    printf("client: connecting to %s\n", s);
 
     freeaddrinfo(servinfo); // all done with this structure
 
     strcpy(buf, "HELO\n\0");
-    printf("c: %s", buf);
     if ((numbytes = send(sockfd, buf, strlen(buf), 0)) == -1) {
         perror("send");
         exit(1);
@@ -83,12 +81,10 @@ int main(int argc, char *argv[])
         exit(1);
     }
     buf[numbytes] = '\0';
-    printf("s: %s", buf);
 
     strcpy(buf, "USERNAME ");
     strcpy(buf + 9, argv[3]);
     strcpy(buf + 9 + strlen(argv[3]), "\n\0");
-    printf("c: %s", buf);
     if ((numbytes = send(sockfd, buf, strlen(buf), 0)) == -1) {
         perror("send");
         exit(1);
@@ -98,11 +94,9 @@ int main(int argc, char *argv[])
         exit(1);
     }
     buf[numbytes] = '\0';
-    printf("s: %s", buf);
 
     for (i = 0; i < 10; i ++) {
         strcpy(buf, "RECV\n\0");
-        printf("c: %s", buf);
         if ((numbytes = send(sockfd, buf, strlen(buf), 0)) == -1) {
             perror("send");
             exit(1);
@@ -112,11 +106,10 @@ int main(int argc, char *argv[])
             exit(1);
         }
         buf[numbytes] = '\0';
-        printf("s: %s", buf);
+        printf("Received: %s", buf + 12);
     }
 
     strcpy(buf, "BYE\n\0");
-    printf("c: %s", buf);
     if ((numbytes = send(sockfd, buf, strlen(buf), 0)) == -1) {
         perror("send");
         exit(1);
@@ -126,7 +119,6 @@ int main(int argc, char *argv[])
         exit(1);
     }
     buf[numbytes] = '\0';
-    printf("s: %s", buf);
 
     close(sockfd);
 
