@@ -25,10 +25,9 @@
         effective bandwidth $= \frac{1024 - 215}{1024} \times 150 \simeq 118.5 (Mbps)$
     \item\mbox{}\\
         transfer time for a 1024B packet from A to B $= 178.84 (\mu s)$\\
-        transfer time for 50B acknowledgement from B to A\\
-        $= 3 \times \lbrack\frac{50 \times 8}{150 \times 10^6} + 5 \times 10^{-6}\rbrack = 23 \times 10^{-6} (s) = 23 (\mu s)$\\
-        effective bandwidth $= 1024 \div (178.84 + 23)$\\
-        $= 5.07 (Mbps)$
+        transfer time for 50B acknowledgement from B to A $= \lbrack\frac{50 \times 8}{150 \times 10^6} + 5 \times 10^{-6}\rbrack \times 3 = 23 \times 10^{-6} (s) = 23 (\mu s)$\\
+        effective bandwidth $= \frac{1024 - 215}{178.84 + 23}$\\
+        $= 4.01 (Mbps)$
     \end{enumerate}
 
 \item\mbox{}\\
@@ -38,7 +37,7 @@
     \item\mbox{}\\
         $2.5 \times 10^3 \times 3 = 7.5 \times 10^3 (bit) = 937.5 (B)$
     \item\mbox{}\\
-        delay $= 45000 \times 10^3 \div (3 \times 10^8) = 150 \times 10^{-3} (s) = 150 (ms)$\\
+        delay $= 45000 \times 10^3 \div (3 \times 10^8) = 150 \times 10^{-3} (s)$\\
         $7 \times 10^6 \times 150 \times 10^{-3} = 105 \times 10^4 (bit)$\\
         $= 131.25 (KB)$
     \end{enumerate}
@@ -150,7 +149,7 @@
         \end{tabular}
 
         As the number of routers increase, the average RTT increase too.\\
-        The number of hops is not the only factor affecting the RTT\@. Some factors such as number of connections and the bandwidth of each link are also factors affecting the RTT\@.
+        The number of hops is not the only factor affecting the RTT\@. Some factors such as the number of users connecting the internet and the bandwidth of each link are also factors affecting the RTT\@.
     \end{enumerate}
 \end{enumerate}
 
