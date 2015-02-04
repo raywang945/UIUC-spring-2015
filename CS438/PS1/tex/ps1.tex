@@ -1,6 +1,157 @@
-\documentclass{article}
+\documentclass[10pt, a4paper]{article}
+\usepackage{geometry}
+\geometry{a4paper,total={6in, 8in}, margin=0.25in}
+\usepackage{booktabs}
+\usepackage{courier}
 \begin{document}
 
-hello world!
+\begin{enumerate}
+\item\mbox{}\\
+    Assume there are $n$ pigeons to carry micro SD, and consider only 1 round trip, so that the total distance is 300km.\\
+    Total data carry by $n$ pigeons $= n \times 64 (GB) = n \times 64 \times 10^9 \times 8 (bit)$\\
+    Total time $= 300 \div 20 (hr) = (300 \div 20) \times 60 \times 60 (s)$\\
+    data rate = $\frac{data}{time} = \frac{n \times 64 \times 10^9 \times 8}{(300 \div 20) \times 60 \times 60} (bps) > 1 (Gbps) = 1 \times 10^9 (bps)$\\
+    $\Rightarrow n > \frac{10^9 \times (300 \div 20) \times 60 \times 60}{64 \times 10^9 \times 8} \simeq 105.5$\\
+    $\Rightarrow n = 106$
+\item
+    \begin{enumerate}
+    \item\mbox{}\\
+        $1024 (byte) = 1024 \times 8 (bit)$\\
+        transmission delay for 3 links $= 3 \times (1024 \times 8) \div (150 \times 10^6) (s)$\\
+        propagation delay for 3 links $= 3 \times 5 \times 10^{-6} (s)$\\
+        Total transfer time $= \frac{3 \times (1024 \times 8)}{150 \times 10^6} + 3 \times 5 \times 10^{-6} = 178.84 \times 10^{-6} (s)$\\
+        $= 178.84 (\mu s)$
+    \item\mbox{}\\
+        effective bandwidth $= \frac{1024 - 215}{1024} \times 150 \simeq 118.5 (Mbps)$
+    \item\mbox{}\\
+        transfer time for a 1024B packet from A to B $= 178.84 (\mu s)$\\
+        transfer time for 50B acknowledgement from B to A\\
+        $= 3 \times \lbrack\frac{50 \times 8}{150 \times 10^6} + 5 \times 10^{-6}\rbrack = 23 \times 10^{-6} (s) = 23 (\mu s)$\\
+        effective bandwidth $= 1024 \div (178.84 + 23)$\\
+        $= 5.07 (Mbps)$
+    \end{enumerate}
+
+\item\mbox{}\\
+    \begin{enumerate}
+    \item\mbox{}\\
+        $9600 \times 30 \times 10^{-3} = 288 (bit) = 36 (B)$
+    \item\mbox{}\\
+        $2.5 \times 10^3 \times 3 = 7.5 \times 10^3 (bit) = 937.5 (B)$
+    \item\mbox{}\\
+        delay $= 45000 \times 10^3 \div (3 \times 10^8) = 150 \times 10^{-3} (s) = 150 (ms)$\\
+        $7 \times 10^6 \times 150 \times 10^{-3} = 105 \times 10^4 (bit)$\\
+        $= 131.25 (KB)$
+    \end{enumerate}
+
+\item\mbox{}\\
+    \begin{enumerate}
+    \item\mbox{}\\
+        $150 / 10 = 15$
+    \item\mbox{}\\
+        If $n$ users are transmitting, then $75 - n$ users are not transmitting\\
+        Probability for $n$ users transmit simultaneously $= C_{n}^{75} \times 0.09^n \times \left(1 - 0.09\right)^{75-n}$\\
+        $= C_{n}^{75} \times 0.09^n \times 0.91^{75-n}$
+    \item\mbox{}\\
+        $\displaystyle\sum_{n=16}^{75} \left(C_{n}^{75} \times 0.09^n \times 0.91^{75-n}\right) \simeq 0.000909$\\
+        $=  0.0909\%$
+    \end{enumerate}
+
+\item\mbox{}\\
+    \begin{tabular}{llll}
+    \toprule
+    status & probability & total points & \# of games\\
+    \midrule
+    lose $1_{st}$ round & $0.35$ & $84$ & $1$\\
+    lose $2_{nd}$ round & $0.35 \times 0.65$ & $84 + 88 = 172$ & $2$\\
+    lose $3_{rd}$ round & $0.35 \times 0.65^2$ & $84 + 88 + 92 = 264$ & $3$\\
+    lose $4_{th}$ round & $0.35 \times 0.65^3$ & $84 + 88 + 92 + 96 = 360$ & $4$\\
+    lose $5_{th}$ round & $0.35 \times 0.65^4$ & $84 + 88 + 92 + 96 + 100 = 460$ & $5$\\
+    win champion & $0.65^5$ & $84 + 88 + 92 + 96 + 100 = 460$ & $5$\\
+    \bottomrule
+    \end{tabular}
+    \begin{enumerate}
+
+    \item\mbox{}\\
+        $0.65^4 \simeq 0.1785$
+
+        $= 17.85 \%$
+    \item\mbox{}\\
+        $0.35 \times 84$\\
+        $+ 0.35 \times 0.65 \times 172$\\
+        $+ 0.35 \times 0.65^2 \times 264$\\
+        $+ 0.35 \times 0.65^3 \times 360$\\
+        $+ 0.35 \times 0.65^4 \times 460$\\
+        $+ 0.65^5 \times 460$\\
+        $\simeq 224.28 = m$
+    \item\mbox{}\\
+        $0.35 \times 1$\\
+        $+ 0.35 \times 0.65 \times 2$\\
+        $+ 0.35 \times 0.65^2 \times 3$\\
+        $+ 0.35 \times 0.65^3 \times 4$\\
+        $+ 0.35 \times 0.65^4 \times 5$\\
+        $+ 0.65^5 \times 5$\\
+        $\simeq 2.53 = n$
+    \item\mbox{}\\
+        $m / n = 224.28 \div 2.53$\\
+        $\simeq 88.65$
+
+    \end{enumerate}
+
+\item\mbox{}\\
+    \begin{enumerate}
+    \item\mbox{}\\
+        \begin{tabular}{llll}
+        \toprule
+        Domain & Registrant Name & Registrant Address & Date\\
+        \midrule
+        symbolic.com & Meystedt, Aron & 12808 Gran Bay Parkway West & 28--jan--1995\\
+        & &Jacksonville, FL 32258& \\
+        & & US & \\
+        \midrule
+        uiuc.edu & University of Illinois & CITES 1120 Digital Computer Laboratory & 18--Jul--1985\\
+        & at Urbana Champaign & 1304 West Springfield Avenue & \\
+        & & Urbana, IL 61801--2910 & \\
+        & & UNITED STATES & \\
+        \midrule
+        9gag.com & Whois Agent & PO Box 639 & 12--apr--2008\\
+        & & Kirkland, WA 98083 & \\
+        & & US & \\
+        \midrule
+        xkcd.com & Registration Private & 14747 N Northsight Blvd Suite 111, PMB 309 & 26--jan--2003\\
+        & & Scottsdale, Arizona 85260 & \\
+        & & United States & \\
+        \midrule
+        goooooooooooooogle.com & DNS Admin & 1600 Amphitheatre Parkway & 18--nov--2003\\
+        & & Mountain View, CA 94043 & \\
+        & & US & \\
+        \bottomrule
+        \end{tabular}
+    \item\mbox{}\\
+        \begin{tabular}{ll}
+        \toprule
+        Domain & average RTT $(ms)$\\
+        \midrule
+        \texttt{cs.illinois.edu} & $2.170$\\
+        \texttt{www.illinois.edu} & $2.277$\\
+        \texttt{www.mit.edu} & $6.383$\\
+        \texttt{www.turkishairlines.com} & $170.159$\\
+        \bottomrule
+        \end{tabular}
+    \item\mbox{}\\
+        \begin{tabular}{ll}
+        \toprule
+        Domain & \# of routers\\
+        \midrule
+        \texttt{cs.illinois.edu} & $8$\\
+        \texttt{www.illinois.edu} & $6$\\
+        \texttt{www.mit.edu} & $14$\\
+        \texttt{www.turkishairlines.com} & $23$\\
+        \bottomrule
+        \end{tabular}
+
+        As the number of routers increase, the average RTT increase too.\\
+        The number of hops is not the only factor affecting the RTT\@. Some factors such as number of connections and the bandwidth of each link are also factors affecting the RTT\@.
+    \end{enumerate}
+\end{enumerate}
 
 \end{document}
