@@ -9,8 +9,4 @@ RUN apt-get update && apt-get install -y \
     libpolarssl-dev \
     iperf \
     tcpdump
-RUN mkdir -p /workspace/MP0/
-RUN mkdir -p /workspace/MP1/
-COPY MP0/Makefile /workspace/MP0/
-COPY MP0/mp0client.c /workspace/MP0/
 WORKDIR /workspace/
