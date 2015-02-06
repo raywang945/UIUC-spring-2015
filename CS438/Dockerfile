@@ -8,5 +8,9 @@ RUN apt-get update && apt-get install -y \
     libpolarssl5 \
     libpolarssl-dev \
     iperf \
-    tcpdump
+    tcpdump \
+    wget \
+    openssl \
+    firefox \
+    tmux
 WORKDIR /workspace/
