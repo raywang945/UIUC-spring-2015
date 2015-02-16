@@ -12,5 +12,7 @@ RUN apt-get update && apt-get install -y \
     wget \
     openssl \
     firefox \
-    tmux
+    tmux \
+    vim \
+    python
 WORKDIR /workspace/
