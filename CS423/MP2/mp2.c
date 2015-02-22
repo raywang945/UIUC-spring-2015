@@ -19,7 +19,7 @@ MODULE_DESCRIPTION("CS-423 MP1");
 
 #define DEBUG          1
 #define FILENAME       "status"
-#define DIRECTORY      "mp1"
+#define DIRECTORY      "mp2"
 #define TIMEINTERVAL   5000
 
 typedef struct {
