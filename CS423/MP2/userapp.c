@@ -5,33 +5,26 @@
 #include <unistd.h>
 #include <string.h>
 
+#define DIRECTORY    "mp2"
+#define FILENAME     "status"
 #define COMMANDLEN   1000
 
-void register_process(unsigned int pid)
+void register_process(unsigned int pid, char *period, char *computation)
 {
     char command[COMMANDLEN];
     memset(command, '\0', COMMANDLEN);
-    sprintf(command, "echo %u > /proc/mp1/status", pid);
+    sprintf(command, "echo \"R, %u, %s, %s\" > /proc/%s/%s", pid, period, computation, DIRECTORY, FILENAME);
     system(command);
 }
 
 int main(int argc, char* argv[])
 {
-    int expire = 10;
-    time_t start_time = time(NULL);
-
-    if (argc == 2) {
-        expire = atoi(argv[1]);
+    if (argc != 3) {
+        puts("error in argc");
+        return 1;
     }
 
-    register_process(getpid());
-
-    // break out the while loop if the time is expired
-    while (1) {
-        if ((int)(time(NULL) - start_time) > expire) {
-            break;
-        }
-    }
+    register_process(getpid(), argv[1], argv[2]);
 
 	return 0;
 }
