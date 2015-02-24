@@ -1,0 +1,287 @@
+% This is an alpha version of the style file for
+% SIGMOBILE's Mobile Computing and Communications Review
+%
+% It should only be used as a guideline for formatting a paper for MC2R.
+% Send comments to Jason Redi at redi@acm.org.   Although I (Jason)
+% use this file to do the final formatting for the issue, there is a
+% lot of hand-tweaking going on as well.   Due to page boundaries, the
+% length of other articles, etc. the paper may look slighly different
+% when it appears in the printed journal.
+%
+% Original version: 0.5
+%
+% Version 0.55: When referencing a section, the section number
+%               included a period at the end.  This looks especially
+%               incorrect when the section number is at the end of a
+%               sentence.   It has been fixed.
+%
+% Version 0.6:  The subsection names did not
+%               show difference between different sections.  Thus,
+%               when an author refers to subsection B, it is ambiguous
+%               wether he means I.B. or II.B.   Therefore I changed
+%               all the section titles to include parent information.
+%
+% Version 0.61: Changes to font sizes to make articles look less dense
+%               and compressed.  Note that this style file was
+%                published in MC2R starting in Oct 99, but did not
+%               appear on the MC2R web site until late 2001.
+
+%% setup the distances between the page and the text
+% odd and even used to be 0.25
+\setlength{\oddsidemargin}{-0.15in}
+\setlength{\evensidemargin}{-0.15in}
+\setlength{\headheight}{0in}
+\setlength{\headsep}{0in}
+%\setlength{\marginparsep}{0in}
+%\setlength{\marginparwidth}{0in}
+% topmargin used to be 0.55
+\setlength{\topmargin}{-0.45in}
+%textwidth used to be 7
+\setlength{\textwidth}{6.8in}
+%textheight used to be 10in
+\setlength{\textheight}{9.9in}
+\setlength{\footskip}{0.3in}
+%didn't have a gutter width before
+\setlength{\columnsep}{0.3in}
+
+%% setup all the font info
+
+% make the title, new century schoolbook style
+\newcommand{\NewCenturyBoldFourteen}{\fontencoding{OT1}%
+                         \fontfamily{pnc}%
+                     \fontseries{b}%
+                                     \fontsize{14pt}{15.5pt}%
+                                     \selectfont}
+
+\newcommand{\NewCenturyBoldTwelve}{\fontencoding{OT1}%
+                                   \fontfamily{pnc}%
+                   \fontseries{b}%
+                   \fontsize{12pt}{13pt}%
+                   \selectfont}
+
+\newcommand{\NewCenturyBoldEleven}{\fontencoding{OT1}%
+                                   \fontfamily{pnc}%
+                   \fontseries{b}%
+                   \fontsize{11pt}{12pt}%
+                   \selectfont}
+
+
+\newcommand{\NewCenturyBoldTen}{\fontencoding{OT1}%
+                                   \fontfamily{pnc}%
+                   \fontseries{b}%
+                   \fontsize{10pt}{11pt}%
+                   \selectfont}
+
+
+\newcommand{\NewCenturyItalicEleven}{\fontencoding{OT1}%
+                                   \fontfamily{pnc}%
+                   \fontseries{b}%
+                       \fontshape{it}
+                   \fontsize{11pt}{12pt}%
+                   \selectfont}
+
+\newcommand{\NewCenturyItalicTen}{\fontencoding{OT1}%
+                                   \fontfamily{pnc}%
+                   \fontseries{b}%
+                       \fontshape{it}
+                   \fontsize{10pt}{11pt}%
+                   \selectfont}
+
+\newcommand{\NewCenturyItalicEight}{\fontencoding{OT1}%
+                                   \fontfamily{pnc}%
+                   \fontseries{m}%
+                                   \fontshape{it}%
+                   \fontsize{8pt}{9pt}%
+                   \selectfont}
+
+\renewcommand{\familydefault}{ptm}
+
+\newcommand{\TimesSmall}{\fontencoding{OT1}%
+                                   \fontfamily{ptm}%
+                   \fontseries{m}%
+                   \fontsize{6pt}{7pt}%
+                   \selectfont}
+
+
+\newcommand{\TimesNine}{\fontencoding{OT1}%
+                                   \fontfamily{ptm}%
+                   \fontseries{m}%
+                   \fontsize{9pt}{9.8pt}%
+                   \selectfont}
+
+\newcommand{\TimesSuperSmall}{\fontencoding{OT1}%
+                                   \fontfamily{ptm}%
+                   \fontseries{m}%
+                   \fontsize{5pt}{6pt}%
+                   \selectfont}
+
+% abstact is Times Roman italic 10pt
+% Authors are Times Roman Bold 10pt
+
+% Palatino 8pt italic
+\newcommand{\PalatinoItalicEight}{\fontencoding{T1}\fontfamily{ppl}\fontseries{m}\fontshape{it}\fontsize{8pt}{9pt}\selectfont}
+\newcommand{\PalatinoItalicNine}{\fontencoding{T1}\fontfamily{ppl}\fontseries{m}\fontshape{it}\fontsize{9pt}{10.5pt}\selectfont}
+\newcommand{\PalatinoItalicTen}{\fontencoding{T1}\fontfamily{ppl}\fontseries{m}\fontshape{it}\fontsize{10pt}{11pt}\selectfont}
+
+
+\definecolor{MC2RGrey}{gray}{0.9}
+\renewcommand{\abstractname}{}
+\date{}
+
+
+\pagestyle{fancy}
+%% setup the footer
+\fancyhf{}
+%\fancyfoot[LO,RE]{\PalatinoItalicNine{Mobile Computing and Communications Review, Volume 1, Number 2}}
+% page number is in 10pt Times font
+%\fancyfoot[RO,LE]{\normalfont\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+
+
+% sections are 11 pt New Century w/shading w/Roman numberal numbering
+\renewcommand{\thesection}{\Roman{section}}
+\renewcommand{\section}{\@startsection{section}{1}{\z@}%
+                                     {-3.25ex\@plus -1ex \@minus -.2ex}%
+                                     {2.3ex \@plus .2ex}%
+                                     {\NewCenturyBoldTwelve}}
+
+% subsections are 9 pt arial w/ lettered numbering
+\renewcommand{\thesubsection}{\thesection.\Alph{subsection}}
+\renewcommand{\subsection}%
+    {%
+    \@startsection{subsection}{2}{\z@}%
+        {-3.25ex\@plus -1ex \@minus -.2ex}%
+        {1.5ex \@plus .2ex}%
+        {\NewCenturyBoldEleven}%
+    }
+
+
+% subsubsections are 12 pt italic Garamond w/ arabic numbering
+\renewcommand{\thesubsubsection}{\thesubsection.\arabic{subsubsection}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{\z@}%
+                                     {-3.25ex\@plus -1ex \@minus -.2ex}%
+                                     {1.5ex \@plus .2ex}%
+                                     {\NewCenturyItalicEleven}}
+
+% change added in version 0.2:
+% when printing the titles (not referencing them) add a period
+\renewcommand{\@seccntformat}[1]{\csname the#1\endcsname.\hspace{1em}}
+
+
+
+\newlength{\MCCRTitleWidth}
+\setlength{\MCCRTitleWidth}{\textwidth}
+\addtolength{\MCCRTitleWidth}{-1in}
+
+
+
+
+
+\renewcommand\maketitle{%\par
+  \begingroup
+    \renewcommand\thefootnote{\@fnsymbol\c@footnote}%
+    \def\@makefnmark{\rlap{\@textsuperscript{\normalfont\@thefnmark}}}%
+    \long\def\@makefntext##1{\parindent 1em\noindent
+            \hb@xt@1.8em{%
+                \hss\@textsuperscript{\normalfont\@thefnmark}}##1}%
+    \if@twocolumn
+      \ifnum \col@number=\@ne
+        \@MCmaketitle
+      \else
+        \twocolumn[\@MCmaketitle]%
+      \fi
+    \else
+      \newpage
+      \global\@topnum\z@   % Prevents figures from going at top of page.
+      \@MCmaketitle
+    \fi
+    \thispagestyle{plain}\@thanks
+  \endgroup
+  \setcounter{footnote}{0}%
+  \global\let\thanks\relax
+  \global\let\maketitle\relax
+  \global\let\@maketitle\relax
+  \global\let\@MCmaketitle\relax
+  \global\let\@thanks\@empty
+  \global\let\@author\@empty
+  \global\let\@date\@empty
+  \global\let\@title\@empty
+  \global\let\title\relax
+  \global\let\author\relax
+  \global\let\date\relax
+  \global\let\and\relax
+}
+
+
+\newcommand\makeColumntitle{%\par
+  \begingroup
+    \renewcommand\thefootnote{\@fnsymbol\c@footnote}%
+    \def\@makefnmark{\rlap{\@textsuperscript{\normalfont\@thefnmark}}}%
+    \long\def\@makefntext##1{\parindent 1em\noindent
+            \hb@xt@1.8em{%
+                \hss\@textsuperscript{\normalfont\@thefnmark}}##1}%
+    \if@twocolumn
+      \ifnum \col@number=\@ne
+        \@MCColumnmaketitle
+      \else
+        \twocolumn[\@MCColumnmaketitle]%
+      \fi
+    \else
+      \newpage
+      \global\@topnum\z@   % Prevents figures from going at top of page.
+      \@MCColumnmaketitle
+    \fi
+    \thispagestyle{plain}\@thanks
+  \endgroup
+  \setcounter{footnote}{0}%
+  \global\let\thanks\relax
+  \global\let\maketitle\relax
+  \global\let\@maketitle\relax
+  \global\let\@MCColumnmaketitle\relax
+  \global\let\@thanks\@empty
+  \global\let\@author\@empty
+  \global\let\@date\@empty
+  \global\let\@title\@empty
+  \global\let\title\relax
+  \global\let\author\relax
+  \global\let\date\relax
+  \global\let\and\relax
+}
+
+\def\@MCmaketitle{%
+  \begin{center}%
+  \let \footnote \thanks
+    {\LARGE \vskip -0.3in
+    \colorbox{MC2RGrey}{\makebox[\textwidth]{\parbox{\MCCRTitleWidth}{\centering\NewCenturyBoldFourteen{\@title}}}}\par}%
+    \vskip 1.5em%
+    {
+      \lineskip .5em%
+      \begin{tabular}[t]{c}%
+        \@author
+      \end{tabular}\par}%
+    \vskip 1em%
+    {\large \@date}%
+  \end{center}%
+  \par
+  \vskip 1.5em}
+
+
+
+\def\@MCColumnmaketitle{%
+  \begin{center}%
+  \let \footnote \thanks
+    {\LARGE \vskip -0.3in
+    \colorbox{MC2RGrey}{\makebox[\textwidth]{\parbox{\MCCRTitleWidth}{\centering\NewCenturyBoldFourteen{\@title}}}}\par}%
+    %\vskip 1.5em%
+    {
+      %\lineskip .5em%
+      \begin{tabular}[t]{c}%
+        \@author
+      \end{tabular}\par}%
+    \vskip 1em%
+    {\large \@date}%
+  \end{center}%
+  \par}
+  %\vskip 1.5em}

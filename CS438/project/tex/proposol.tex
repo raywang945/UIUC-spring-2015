@@ -1,0 +1,52 @@
+\documentclass[twocolumn,11pt,twoside]{article}
+
+\usepackage{fancyhdr,color, graphics, epsfig}
+\usepackage{MC2R}
+
+\begin{document}
+
+\title{WiLD Advance: Design and Implementation of High Performance WiFi Based Long Distance Networks (Proposal)
+{\normalfont\thanks{This work is inspired by WiLDNet.}}}
+
+\author{
+\begin{tabular}{p{2in} p{1in} p{2in}}
+& \multicolumn{1}{c}{\textbf{Shuo-Yang Wang}} & \\
+& \multicolumn{1}{c}{\textit{swang234@illinois.edu}} & \\
+\end{tabular}\\
+CS Department, University of Illinois at Urbana-Champaign, USA\\
+\\
+\parbox{5.5in}{\textit{
+WiFi-based Long Distance (WiLD) networks with links as long as 50-100 km have the potential to provide connectivity at substantially lower costs than traditional approaches. However, real-world deployments of such networks yield very poor end-to-end performance. First, the current 802.11 MAC protocol has fundamental shortcomings when used over long distances. Second, WiLD networks can exhibit high and variable loss characteristics, thereby severely limiting end-to-end throughput. This paper describes the design, implementation, and evaluation of WiLD Advance, a system that overcomes these problems and provides enhanced end-to-end performance in WiLD networks. I plan to describe the design, implementation, and evaluation of WiLD Advance, a system that overcomes these two problems and provides enhanced end-to-end performance in WiLD networks.}}
+}
+
+\maketitle
+\thispagestyle{fancy}
+\normalfont
+
+\section{Introduction}
+Many developing regions around the world, especially in rural or remote areas, require low-cost network connectivity solutions. Traditional approaches based on telephone, cellular, satellite or fiber have proved to be expensive proposition especially in low population density and low-income regions. In Africa, even when cellular or satellite coverage is available in rural regions, bandwidth is extremely expensive (e.g. satellite bandwidth is about US\$3000/Mbps per month). Cellular and WiMax, another proposed solution, require a minimum user density to amortize the cost of the basestation that is so far too high for rural areas. Finally, all of these solutions focus on licensed spectrum and carrier-based deployment, which limits their usefulness to the kind of ``grass roots'' projects typical for developing regions.
+
+WiFi-based Long Distance (WiLD) networks are emerging as a low-cost connectivity solution and are increasingly being deployed in developing regions. The primary cost gains arise from the low-cost and low-power single-board computers and high-volume low-cost off-the-shelf 802.11 wireless cards using unlicensed spectrum. The nodes are also lightweight and don't need expensive towers. These networks are very different from the short-range multi-hop urban mesh networks. Unlike mesh networks, which use omnidirectional antennas to cater to short ranges (less than 1-2 km at most), WiLD networks are comprised of point-to-point wireless links that use high-gain directional antennas with line of sight (LOS) over long distances (10-100 km).
+
+Despite the promise of WiLD networks as a low-cost network connectivity solution, the real-world deployments of such networks face many challenges. The performance in real-word deployments is abysmal. There are two main reasons for this poor performance. First, the stock 802.11 protocol has fundamental \textit{protocol shortcomings} that make it ill-suited for WiLD environments. Three specific shortcomings include: (a) the \textit{802.11 link-level recovery} mechanism results in low utilization; (b) at \textit{long distances frequent collisions occur because of the failure of CSMA/CA}; (c) WiLD networks experience \textit{inter-link interference} which introduces the need for synchronizing packet transmissions at each node. The second problem is that the links in the WiLD network deployments (in US, India, Ghana) experienced very \textit{high and variable packet loss rates} induced by external factors; under such high loss conditions, TCP flows hardly progress and continuously experience timeouts.
+
+I plan to describe the design and implementation of WiLD Advance, a system that addresses all the aforementioned problems and provides enhanced end-to-end performance in multi-hop WiLD networks.
+
+%\subsection{A subsection heading}
+%\label{sec:subsection_heading}
+
+%\subsubsection{A subsubsection heading}
+%\label{sec:subsubsection_heading}
+
+\begin{thebibliography}{9}
+    \bibitem{wildnet} R. Patra, S. Nedevschi, S. Surana, A. Sheth, L. Subramanian, and E. Brewer. WiLDNet: Design and Implementation of High Performance WiFi Based Long Distance Networks. \emph{USENIX NSDI} (2007).
+    \bibitem{test} D. Aguayo, J. Bicket, S. Biswas, G. Judd, and R. Morris. Link-level Measurements from an 802.11b Mesh Network. \emph{ACM SIGCOMM} (2004).
+    \bibitem{test2} H. Balakrishan. \emph{Challenges to Reliable Data Transport over Heterogeneous Wireless Networks}. PhD thesis, University of California at Berkeley
+    \bibitem{test3} H. Balakrishan, S. Seshan, E. Amir, and R. Katz. Improving TCP/IP Performance over Wireless Networks. \emph{ACM MOBICOM} (1995).
+    \bibitem{test4} P. Bhagwat, B. Raman, and D. Sanghi. Turning 802.11 Inside-out. \emph{ACM SIGCOMM CCR} (2004).
+\end{thebibliography}
+
+%\section{Another Section heading}
+%The previous subsubsection was ~\ref{sec:subsubsection_heading}
+
+\end{document}
