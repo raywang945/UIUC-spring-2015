@@ -4,7 +4,6 @@
 #include <linux/proc_fs.h>
 #include <linux/slab.h>
 
-/*#include "mp1_given.h"*/
 #include "mp2_given.h"
 
 MODULE_LICENSE("GPL");
@@ -17,30 +16,43 @@ MODULE_DESCRIPTION("CS-423 MP2");
 #define REGISTRATION     'R'
 #define YIELD            'Y'
 #define DEREGISTRATION   'D'
+#define SLEEPING         1
 
-struct mp2_task_struct {
+typedef struct {
     struct task_struct *linux_task;
-    struct timer_list wakeup_timer;
-    struct list_head task_node;
+    /*struct timer_list wakeup_timer;*/
+    struct list_head list;
 
-    unsigned int task_state;
-    uint64_t next_period;
+    /*uint64_t next_period;*/
     unsigned int pid;
-    unsigned long relative_period;
-    unsigned long slice;
-};
+    unsigned int period;
+    unsigned int computation;
+    unsigned int state;
+    /*unsigned long relative_period;*/
+    /*unsigned long slice;*/
+} proc_list;
 
 static struct proc_dir_entry *proc_dir, *proc_entry;
+LIST_HEAD(mp2_proc_list);
+static spinlock_t mp2_lock;
 
 static ssize_t mp2_read(struct file *file, char __user *buffer, size_t count, loff_t *data)
 {
     unsigned long copied = 0;
     char *buf;
+    proc_list *tmp;
+    unsigned long flags;
 
     buf = (char *)kmalloc(count, GFP_KERNEL);
-    copied += sprintf(buf, "Hello World!\n");
-    buf[copied] = '\0';
 
+    // enter critical section
+    spin_lock_irqsave(&mp2_lock, flags);
+    list_for_each_entry(tmp, &mp2_proc_list, list) {
+        copied += sprintf(buf + copied, "%u %u %u %u\n", tmp->pid, tmp->period, tmp->computation, tmp->state);
+    }
+    spin_unlock_irqrestore(&mp2_lock, flags);
+
+    buf[copied] = '\0';
     copy_to_user(buffer, buf, copied);
 
     kfree(buf);
@@ -49,9 +61,46 @@ static ssize_t mp2_read(struct file *file, char __user *buffer, size_t count, lo
 
 void mp2_register_processs(char *buf)
 {
-    printk(KERN_INFO "^^^^^^^^^^^^^^^^^\n");
-    printk(KERN_INFO "%s\n", buf);
-    printk(KERN_INFO "^^^^^^^^^^^^^^^^^\n");
+    proc_list *tmp;
+    unsigned long flags;
+
+    // initialize tmp->list
+    tmp = (proc_list *)kmalloc(sizeof(proc_list), GFP_KERNEL);
+    INIT_LIST_HEAD(&tmp->list);
+
+    // set tmp->pid
+    sscanf(strsep(&buf, ","), "%u", &tmp->pid);
+    // set tmp->period
+    sscanf(strsep(&buf, ","), "%u", &tmp->period);
+    // set tmp->computation
+    sscanf(strsep(&buf, "\n"), "%u", &tmp->computation);
+    // set tmp->linux_task
+    tmp->linux_task = find_task_by_pid(tmp->pid);
+    // set tmp->state
+    tmp->state = SLEEPING;
+
+    // add tmp to mp2_proc_list
+    spin_lock_irqsave(&mp2_lock, flags);
+    list_add(&tmp->list, &mp2_proc_list);
+    spin_unlock_irqrestore(&mp2_lock, flags);
+}
+
+void mp2_unregister_process(char *buf)
+{
+    unsigned int pid;
+    proc_list *pos, *n;
+    unsigned long flags;
+
+    sscanf(buf, "%u", &pid);
+
+    spin_lock_irqsave(&mp2_lock, flags);
+    list_for_each_entry_safe(pos, n, &mp2_proc_list, list) {
+        if (pos->pid == pid) {
+            list_del(&pos->list);
+            kfree(pos);
+        }
+    }
+    spin_unlock_irqrestore(&mp2_lock, flags);
 }
 
 static ssize_t mp2_write(struct file *file, const char __user *buffer, size_t count, loff_t *data)
@@ -62,27 +111,22 @@ static ssize_t mp2_write(struct file *file, const char __user *buffer, size_t co
     copy_from_user(buf, buffer, count);
     buf[count] = '\0';
 
-    printk(KERN_INFO "===================\n");
     // parse operation character
-    printk(KERN_INFO "%s\n", buf);
     opt = strsep(&buf, ",");
 
     switch (opt[0]) {
         case REGISTRATION:
-            printk("REGISTRATION\n");
             mp2_register_processs(buf + 1);
             break;
         case YIELD:
             printk("YIELD\n");
             break;
         case DEREGISTRATION:
-            printk("DEREGISTRATION\n");
+            mp2_unregister_process(buf + 1);
             break;
         default:
             printk(KERN_INFO "error in my_mapping(opt)\n");
     }
-
-    printk(KERN_INFO "===================\n");
 
     kfree(buf);
 
@@ -115,6 +159,9 @@ static int __init mp2_init(void)
         return -ENOMEM;
     }
 
+    // initialize lock
+    spin_lock_init(&mp2_lock);
+
     printk(KERN_ALERT "MP2 MODULE LOADED\n");
     return 0;
 }
@@ -122,6 +169,8 @@ static int __init mp2_init(void)
 // mp1_exit - Called when module is unloaded
 static void __exit mp2_exit(void)
 {
+    proc_list *pos, *n;
+
     #ifdef DEBUG
     printk(KERN_ALERT "MP2 MODULE UNLOADING\n");
     #endif
@@ -131,6 +180,12 @@ static void __exit mp2_exit(void)
     remove_proc_entry(FILENAME, proc_dir);
     // remove /proc/mp1
     remove_proc_entry(DIRECTORY, NULL);
+
+    // free mp1_proc_list
+    list_for_each_entry_safe(pos, n, &mp2_proc_list, list) {
+        list_del(&pos->list);
+        kfree(pos);
+    }
 
     printk(KERN_ALERT "MP2 MODULE UNLOADED\n");
 }
