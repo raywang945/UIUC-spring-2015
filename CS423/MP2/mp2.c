@@ -34,23 +34,22 @@ typedef struct {
 
 static struct proc_dir_entry *proc_dir, *proc_entry;
 LIST_HEAD(mp2_proc_list);
-static spinlock_t mp2_lock;
+DEFINE_MUTEX(mp2_mutex);
 
 static ssize_t mp2_read(struct file *file, char __user *buffer, size_t count, loff_t *data)
 {
     unsigned long copied = 0;
     char *buf;
     proc_list *tmp;
-    unsigned long flags;
 
     buf = (char *)kmalloc(count, GFP_KERNEL);
 
     // enter critical section
-    spin_lock_irqsave(&mp2_lock, flags);
+    mutex_lock_interruptible(&mp2_mutex);
     list_for_each_entry(tmp, &mp2_proc_list, list) {
         copied += sprintf(buf + copied, "%u %u %u %u\n", tmp->pid, tmp->period, tmp->computation, tmp->state);
     }
-    spin_unlock_irqrestore(&mp2_lock, flags);
+    mutex_unlock(&mp2_mutex);
 
     buf[copied] = '\0';
 
@@ -64,7 +63,6 @@ static ssize_t mp2_read(struct file *file, char __user *buffer, size_t count, lo
 void mp2_register_processs(char *buf)
 {
     proc_list *tmp;
-    unsigned long flags;
 
     // initialize tmp->list
     tmp = (proc_list *)kmalloc(sizeof(proc_list), GFP_KERNEL);
@@ -82,27 +80,26 @@ void mp2_register_processs(char *buf)
     tmp->state = SLEEPING;
 
     // add tmp to mp2_proc_list
-    spin_lock_irqsave(&mp2_lock, flags);
+    mutex_lock_interruptible(&mp2_mutex);
     list_add(&(tmp->list), &mp2_proc_list);
-    spin_unlock_irqrestore(&mp2_lock, flags);
+    mutex_unlock(&mp2_mutex);
 }
 
 void mp2_unregister_process(char *buf)
 {
     unsigned int pid;
     proc_list *pos, *n;
-    unsigned long flags;
 
     sscanf(buf, "%u", &pid);
 
-    spin_lock_irqsave(&mp2_lock, flags);
+    mutex_lock_interruptible(&mp2_mutex);
     list_for_each_entry_safe(pos, n, &mp2_proc_list, list) {
         if (pos->pid == pid) {
             list_del(&pos->list);
             kfree(pos);
         }
     }
-    spin_unlock_irqrestore(&mp2_lock, flags);
+    mutex_unlock(&mp2_mutex);
 }
 
 static ssize_t mp2_write(struct file *file, const char __user *buffer, size_t count, loff_t *data)
@@ -158,9 +155,6 @@ static int __init mp2_init(void)
         return -ENOMEM;
     }
 
-    // initialize lock
-    spin_lock_init(&mp2_lock);
-
     printk(KERN_ALERT "MP2 MODULE LOADED\n");
     return 0;
 }
@@ -179,6 +173,8 @@ static void __exit mp2_exit(void)
     remove_proc_entry(FILENAME, proc_dir);
     // remove /proc/mp1
     remove_proc_entry(DIRECTORY, NULL);
+
+    mutex_destroy(&mp2_mutex);
 
     // free mp1_proc_list
     list_for_each_entry_safe(pos, n, &mp2_proc_list, list) {
