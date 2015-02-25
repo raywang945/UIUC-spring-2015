@@ -53,9 +53,11 @@ static ssize_t mp2_read(struct file *file, char __user *buffer, size_t count, lo
     spin_unlock_irqrestore(&mp2_lock, flags);
 
     buf[copied] = '\0';
+
     copy_to_user(buffer, buf, copied);
 
     kfree(buf);
+
     return copied;
 }
 
@@ -66,7 +68,7 @@ void mp2_register_processs(char *buf)
 
     // initialize tmp->list
     tmp = (proc_list *)kmalloc(sizeof(proc_list), GFP_KERNEL);
-    INIT_LIST_HEAD(&tmp->list);
+    INIT_LIST_HEAD(&(tmp->list));
 
     // set tmp->pid
     sscanf(strsep(&buf, ","), "%u", &tmp->pid);
@@ -81,7 +83,7 @@ void mp2_register_processs(char *buf)
 
     // add tmp to mp2_proc_list
     spin_lock_irqsave(&mp2_lock, flags);
-    list_add(&tmp->list, &mp2_proc_list);
+    list_add(&(tmp->list), &mp2_proc_list);
     spin_unlock_irqrestore(&mp2_lock, flags);
 }
 
@@ -105,24 +107,21 @@ void mp2_unregister_process(char *buf)
 
 static ssize_t mp2_write(struct file *file, const char __user *buffer, size_t count, loff_t *data)
 {
-    char *buf, *opt;
+    char *buf;
 
     buf = (char *)kmalloc(count + 1, GFP_KERNEL);
     copy_from_user(buf, buffer, count);
     buf[count] = '\0';
 
-    // parse operation character
-    opt = strsep(&buf, ",");
-
-    switch (opt[0]) {
+    switch (buf[0]) {
         case REGISTRATION:
-            mp2_register_processs(buf + 1);
+            mp2_register_processs(buf + 3);
             break;
         case YIELD:
             printk("YIELD\n");
             break;
         case DEREGISTRATION:
-            mp2_unregister_process(buf + 1);
+            mp2_unregister_process(buf + 3);
             break;
         default:
             printk(KERN_INFO "error in my_mapping(opt)\n");

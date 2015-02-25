@@ -18,4 +18,4 @@ app: userapp.c userapp.h
 	$(GCC) -o userapp userapp.c
 
 clean:
-	$(RM) -f userapp *~ *.ko *.o *.mod.c Module.symvers modules.order
+	$(RM) -rf userapp .*.cmd .tmp_versions *~ *.ko *.o *.mod.c Module.symvers modules.order

@@ -87,6 +87,7 @@ int main(int argc, char* argv[])
     unsigned int pid = getpid();
 
     if (argc != 4) {
+    /*if (argc != 3) {*/
         puts("error in argc");
         return 1;
     }
