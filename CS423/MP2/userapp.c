@@ -63,7 +63,9 @@ int is_process_exist(unsigned int pid)
     buf[len] = '\0';
     fclose(fd);
 
-    tmp = strtok(buf, "\n");
+    if ((tmp = strtok(buf, "\n")) == NULL) {
+        return 0;
+    }
     sscanf(tmp, "%u", &tmp_pid);
     while (!is_exist_in_array(pid_list, pid_list_num, tmp_pid)) {
         pid_list[pid_list_num] = tmp_pid;
