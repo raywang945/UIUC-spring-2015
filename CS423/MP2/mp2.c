@@ -17,6 +17,8 @@ MODULE_DESCRIPTION("CS-423 MP2");
 #define YIELD            'Y'
 #define DEREGISTRATION   'D'
 #define SLEEPING         1
+#define READY            2
+#define RUNNING          3
 
 typedef struct {
     struct task_struct *linux_task;
@@ -35,6 +37,28 @@ typedef struct {
 static struct proc_dir_entry *proc_dir, *proc_entry;
 LIST_HEAD(mp2_proc_list);
 DEFINE_MUTEX(mp2_mutex);
+/*static struct task_struct *mp2_dispatch_thread;*/
+
+proc_list *get_highest_priority_ready_task(void)
+{
+    proc_list *tmp, *result = NULL;
+
+    mutex_lock_interruptible(&mp2_mutex);
+    list_for_each_entry(tmp, &mp2_proc_list, list) {
+        if (tmp->state == READY) {
+            if (result == NULL) {
+                result = tmp;
+            } else {
+                if (result -> period > tmp->period) {
+                    result = tmp;
+                }
+            }
+        }
+    }
+    mutex_unlock(&mp2_mutex);
+
+    return result;
+}
 
 static ssize_t mp2_read(struct file *file, char __user *buffer, size_t count, loff_t *data)
 {
