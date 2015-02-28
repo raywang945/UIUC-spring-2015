@@ -1,115 +1,54 @@
 #include "userapp.h"
-#include <stdio.h>
 #include <stdlib.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include <string.h>
 
-#define DIRECTORY     "mp2"
-#define FILENAME      "status"
-#define COMMANDLEN    1000
-#define FILENAMELEN   500
-#define BUFFERLEN     5000
-#define PIDLISTLEN    100
-
-void register_process(unsigned int pid, char *period, char *computation)
-{
-    char command[COMMANDLEN];
-    memset(command, '\0', COMMANDLEN);
-    sprintf(command, "echo \"R, %u, %s, %s\" > /proc/%s/%s", pid, period, computation, DIRECTORY, FILENAME);
-    system(command);
-}
-
-void yield_process(unsigned int pid)
-{
-    char command[COMMANDLEN];
-    memset(command, '\0', COMMANDLEN);
-    sprintf(command, "echo \"Y, %u\" > /proc/%s/%s", pid, DIRECTORY, FILENAME);
-    system(command);
-}
-
-void unregister_process(unsigned int pid)
-{
-    char command[COMMANDLEN];
-    memset(command, '\0', COMMANDLEN);
-    sprintf(command, "echo \"D, %u\" > /proc/%s/%s", pid, DIRECTORY, FILENAME);
-    system(command);
-}
-
-int is_exist_in_array(unsigned int *array, int array_len, int number)
-{
-    int i;
-    for (i = 0; i < array_len; i ++) {
-        if (array[i] == number) {
-            return 1;
-        }
-    }
-    return 0;
-}
-
-int is_process_exist(unsigned int pid)
-{
-    char filename[FILENAMELEN], buf[BUFFERLEN];
-    FILE *fd;
-    unsigned int pid_list[PIDLISTLEN], tmp_pid;
-    int i, len, pid_list_num = 0;
-    char *tmp;
-
-    len = sprintf(filename, "/proc/%s/%s", DIRECTORY, FILENAME);
-    filename[len] = '\0';
-
-    fd = fopen(filename, "r");
-    len = fread(buf, sizeof(char), BUFFERLEN - 1, fd);
-    buf[len] = '\0';
-    fclose(fd);
-
-    if ((tmp = strtok(buf, "\n")) == NULL) {
-        return 0;
-    }
-    sscanf(tmp, "%u", &tmp_pid);
-    while (!is_exist_in_array(pid_list, pid_list_num, tmp_pid)) {
-        pid_list[pid_list_num] = tmp_pid;
-        pid_list_num ++;
-        tmp = strtok(NULL, "\n");
-        sscanf(tmp, "%u", &tmp_pid);
-    }
-
-    for (i = 0; i < pid_list_num; i ++) {
-        if (pid_list[i] == pid) {
-            return 1;
-        }
-    }
-    return 0;
-}
+#define BUFLEN        1000
 
 int main(int argc, char* argv[])
 {
-    int expire = atoi(argv[3]);
-    time_t start_time = time(NULL);
+    int loop_cycle = atoi(argv[3]), i, len, offset;
+    int fact_iteration = get_iteration(MAPPINGFILE, atoi(argv[2]));
     unsigned int pid = getpid();
+    char buf[BUFLEN];
+    struct timeval t0, start, end;
 
     if (argc != 4) {
-    /*if (argc != 3) {*/
         puts("error in argc");
         return 1;
     }
 
+    // register process through /proc/mp2/status
     register_process(pid, argv[1], argv[2]);
 
+    // read /proc/mp2/status and check if the process registered successfully
     if (!is_process_exist(pid)) {
         puts("error in is_process_exist");
         exit(1);
     }
 
-    /*yield_process(pid);*/
+    // record when the task start
+    gettimeofday(&t0, NULL);
 
-    // break out the while loop if the time is expired
-    while (1) {
-        if ((int)(time(NULL) - start_time) > expire) {
-            break;
-        }
+    // prepare for the buffer which will be written to the log file
+    offset = sprintf(buf, "%u\t%s\t%s\t", pid, argv[1], argv[2]);
+
+    // write yield to /proc/mp2/status
+    yield_process(pid);
+
+    for (i = 0; i < loop_cycle; i ++) {
+        gettimeofday(&start, NULL);
+        do_job(fact_iteration);
+        gettimeofday(&end, NULL);
+
+        // write to the log file
+        len = sprintf(buf + offset, "%f\t%f\t%f\n", time_diff(start, end), time_diff(t0, start), time_diff(t0, end));
+        buf[offset + len] = '\0';
+        write_log(buf);
+
+        // write yield to /proc/mp2/status
+        yield_process(pid);
     }
 
+    // unregister process through /proc/mp2/status
     unregister_process(pid);
 
 	return 0;

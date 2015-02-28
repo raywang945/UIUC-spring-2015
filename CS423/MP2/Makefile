@@ -17,5 +17,8 @@ modules:
 app: userapp.c userapp.h
 	$(GCC) -o userapp userapp.c
 
+mapping: calculate_mapping.c userapp.h
+	$(GCC) -o calculate_mapping calculate_mapping.c
+
 clean:
-	$(RM) -rf userapp .*.cmd .tmp_versions *~ *.ko *.o *.mod.c Module.symvers modules.order
+	$(RM) -rf userapp calculate_mapping .*.cmd .tmp_versions *~ *.ko *.o *.mod.c Module.symvers modules.order
