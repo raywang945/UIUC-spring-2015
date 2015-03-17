@@ -173,8 +173,8 @@
         \includegraphics[width=4in]{images/p3b_block_diagram}
     \item At the maximum sustainable bandwidth (i.e., with no packets dropped), what is the transmission rate - the total number of bits per second, including headers and trailers - sent over each network link?\\
         \color{blue}
-        For UltraNet, transmission rate $= \frac{480}{1000} \times (1000 + 80) = 518.4 (Mbps)$\\
-        For OmniNet, transmission rate $= \frac{480}{1000} \times (1000 + 100) = 528 (Mbps)$
+        For UltraNet, transmission rate $= 480 \times \frac{1000 + 80}{1000} = 518.4 (Mbps)$\\
+        For OmniNet, transmission rate $= 480 \times \frac{1000 + 100}{1000} = 528 (Mbps)$
         \color{black}
     \end{enumerate}
 % 4
@@ -668,7 +668,7 @@
         \hline
         C $\rightarrow$ B & 3 & C & 2 & B & 2 & B & 3 & D \\
         \hline
-        B $\rightarrow$ D & 3 & C & 2 & B & 2 & B & 3 & D \\
+        B $\rightarrow$ D & 3 & C & 2 & B & 4 & B & 3 & D \\
         \hline
         D $\rightarrow$ E & 3 & C & 2 & B & 4 & B & 3 & D \\
         \hline
@@ -686,85 +686,268 @@
     Instead of updating routing table to ``A unreachable'', all nodes believe that A is still reachable, which is obviously contradict to the real situation. This is the well-known ``count to infinity'' problem. Nodes will keep sending updating messages and forwarding packets toward A, which is a waste of bandwidth.
     \color{black}
 % 11
-\item\mbox{}
+\item\mbox{}Explain the exposed terminal problem and how it is solved.\\
+    \color{blue}
+    \begin{tikzpicture}
+        \tikzstyle{main node}=[draw,auto,node distance=35pt,circle,align=center]
+        \node[main node] (A) {A};
+        \node[main node] (B) [right of=A] {B};
+        \node[main node] (C) [right of=B] {C};
+        \node[main node] (D) [right of=C] {D};
+
+        \draw (B) circle (45pt);
+        \draw (C) circle (45pt);
+    \end{tikzpicture}\\
+    B transmits to A, C hears B, C refuses to transmit to D.\\
+    MACA solution: If C sees a RTS without a CTS, C can transmit.
+    \color{black}
 % 12
-\item\mbox{}
+\item\mbox{}Name the OSI layer or layers in which medium access control (MAC) is addressed and state whether MAC is typically handled in hardware, in software, or in both in the Internet architecture.\\
+    \color{blue}
+    MAC is addressed in the data link layer, and is typically handled in hardware.
+    \color{black}
 % 13
-\item\mbox{}
+\item\mbox{}Give two good reasons to allow branching - that is, the ability to support multiple protocols above and below any given protocol - in protocol graphs.
+    \color{blue}
+    \begin{itemize}
+    \item Can use same protocol over different mediums.
+    \item Can use different protocols over same network.
+    \end{itemize}
+    \color{black}
 % 14
-\item\mbox{}
+\item\mbox{}Explain one advantage of abstracting networked communication into multiple layers.\\
+    \color{blue}
+    Communication Network with multiple layers is easier to maintain. For example, if a network goes down, we can examine layer by layer instead of the entire network.
+    \color{black}
 % 15
-\item\mbox{}
+\item\mbox{}Explain how a receiver detects the end of a frame with length-based framing.\\
+    \color{blue}
+    The receiver detects the end of a frame by looking at the length of the payload stored in the frame header.
+    \color{black}
 % 16
-\item\mbox{}
+\item\mbox{}Name the OSI layer or layers in which framing is addressed and state whether framing is typically handled in hardware, in software, or in both in the internet architecture.\\
+    \color{blue}
+    Framing is addressed in the data link layer, and is typically handled in hardware.
+    \color{black}
 % 17
-\item\mbox{}
+\item\mbox{}Explain two methods of solving the problem of communicating between machines with mixed endianness on a network.
+    \color{blue}
+    \begin{itemize}
+    \item Let two machines to synchronize their endian first then decide which endian to use.
+    \item Use a standard endian in network connection. For example, all communicate in big endian.
+    \end{itemize}
+    \color{black}
 % 18
 \item\mbox{} Explain how a receiver detects the end of a frame with sentinel-based framing.\\
     \color{blue}
     The end of the frame must be marked with a special byte or bit pattern so that the receiver can detect whether the frame ends or not.
     \color{black}
 % 19
-\item\mbox{}
+\item\mbox{}What is head-of-line blocking, and when does it occur?\\
+    \color{blue}
+    Head-of-line blocking coours when a line of packets is held up by the first packet. The packets in the back need to wait for the first packet even if they are not contending resources.
+    \color{black}
 % 20
-\item\mbox{}
+\item\mbox{}Define the Hamming distance of an encoding.\\
+    \color{blue}
+    The minimum number of bit flips to move from one code to another.
+    \color{black}
 % 21
-\item\mbox{}
+\item\mbox{}Explain the effect of layering on end-to-end bandwidth.\\
+    \color{blue}
+    The more layering generally means longer header in the data packet. Thus it will lower the end-to-end bandwidth.
+    \color{black}
 % 22
-\item\mbox{}
+\item\mbox{}Name the OSI layer of layers in which encoding is addressed and state whether encoding is typically handled in hardware, in software, or in both in the Internet architecture.\\
+    \color{blue}
+    Encoding is addressed in the data link layer, and is typically handled in hardware.
+    \color{black}
 % 23
-\item\mbox{}
+\item\mbox{}Explain a drawback of forwarding packets with source routing.
+    \color{blue}
+    \begin{itemize}
+    \item Hosts need to know entire network topology
+    \item Large headers
+    \item Hosts must learn for all changes in the network
+    \end{itemize}
+    \color{black}
 % 24
-\item\mbox{}
+\item\mbox{}What delay is relevant and what bandwidth is relevant for computing the delay-bandwidth product of two links in series?\\
+    \color{blue}
+    Sum of all delays are relevant and only the smallest bandwidth is relevant because it is the bottleneck
+    \color{black}
 % 25
-\item\mbox{}
+\item\mbox{}Describe a problem associated with communicating between heterogeneous architectures (e.g., a mixture of Sun and Intel hosts) on a network.\\
+    \color{blue}
+    The endianness may be a problem associated with communicating between heterogeneous architectures on a network.
+    \color{black}
 % 26
-\item\mbox{}
+\item\mbox{}What purposes do the four addresses in an IEEE 802.11 packet serve?\\
+    \color{blue}
+    An 802.11 frame can have up to four address fields. Each field can carry a MAC address. Address 1 is the receiver, address 2 is the transmitter, and address 3 is used for filtering purposes by the receiver.
+    \color{black}
 % 27
-\item\mbox{}
+\item\mbox{}Show that the final parity check in a horizontal and vertical parity check code, if taken as the modulo 2 sum of all data bits, is equal to the modulo 2 sum of the horizontal parity checks and also equal to the modulo 2 sum of the vertical parity checks.\\
+    \color{blue}
+    Example:\\
+    \begin{tabular}{cccc|c}
+        1 & 0 & 1 & 1 & 1\\
+        0 & 1 & 1 & 0 & 0\\
+        0 & 1 & 1 & 1 & 1\\
+        1 & 0 & 0 & 0 & 1\\
+        1 & 1 & 0 & 0 & 0\\
+        1 & 0 & 0 & 1 & 0\\
+        \hline
+        0 & 1 & 1 & 1 & 1\\
+    \end{tabular}
+    modulo 2 sum of all data bits $= 1$\\
+    modulo 2 sum of the horizontal parity checks $= 1$\\
+    modulo 2 sum of the vertical parity checks $= 1$\\
+    \color{black}
 % 28
 \item\mbox{} \sout{Explain how a receiver detects the end of a frame with clock-based framing (e.g., SONET).}
 % 29
-\item\mbox{}
+\item\mbox{} Explain what frequency-hopped spread spectrum modulation is, and a motivation for using it.\\
+    \color{blue}
+    Frequency-hopped spread spectrum modulation transmit over a random sequence of frequency, and the motivation for using it is to prevent from jamming and snooping by attackers.
+    \color{black}
 % 30
-\item\mbox{}
+\item\mbox{}Suppose packets on a wireless link consist of $N$ data bits and $H$ header bits each, where $H$ is fixed. Suppose bits are received in error with probability $P$, independently of each other, and that $N$ is adjusted to maximize the throughput of data in bits per second. If $P$ gets larger, does the optimal value of $N$ get larger or smaller? Why?\\
+    \color{blue}
+    The probability for a packet to be received in success $= (1 - P)^{N+H}$\\
+    $\Rightarrow$ throughput in bits per second $= (1 - P)^{N+H} \times N \times \frac{B}{N + H}$\\
+    where $B$ is the bandwidth\\
+    $\because (1 - P)^{N+H}$ is more sensitive to change of $N$\\
+    $\therefore$ as $P$ gets larger, $N$ should get smaller to give the maximum throughput
+    \color{black}
 % 31
-\item\mbox{}
+\item\mbox{}Name the four components that uniquely specify a TCP connection and state the length of each component in bits.
+    \color{blue}
+    \begin{itemize}
+    \item Source address: 32 bits for IPv4
+    \item Source port: 16 bits
+    \item Destination address: 32 bits for IPv4
+    \item Destination port: 16 bits
+    \end{itemize}
+    \color{black}
 % 32
-\item\mbox{}
+\item\mbox{}Consider a frame consisting of two characters of four bits each. Assume that the probability of error is $10^{-3}$, independent for each bit. What is the probability that the frame is received correctly? And a parity bit to each character. Now what is the probability?\\
+    \color{blue}
+    $(1 - 10^{-3})^8 \simeq 0.992 = 99.2\%$\\
+    $(1 - 10^{-3})^{10} \simeq 0.990 = 99.0\%$
+    \color{black}
 % 33
-\item\mbox{}
+\item\mbox{}State an advantage of direct memory access (DMA) over programmed input/output (PIO).\\
+    \color{blue}
+    CPU is free during data transfer.
+    \color{black}
 % 34
-\item\mbox{}
+\item\mbox{}Name the OSI layer or layers in which error detection is addressed in the Internet architecture and state whether error detection is typically handled in hardware, in software, or in both.\\
+    \color{blue}
+    CRC check is addressed in the data link layer, and is typically handled in hardware.\\
+    IP checksum is addressed in the network layer, and is typically handled in software.
+    \color{black}
 % 35
-\item\mbox{}
+\item\mbox{}Name and explain two effects that complicate the process of signal transmission.
+    \color{blue}
+    \begin{itemize}
+        \item clock recovery problem: The receiver and the sender's clocks need to be synchronize to recover the bits which are sent
+    \item continuous 0s or 1s: Long strings of 0s confused with no signal, and long strings of 1s causes baseline wander
+    \end{itemize}
+    \color{black}
 % 36
-\item\mbox{}
+\item\mbox{} \sout{Explain the main drawback of the use of multiple logical channels for reliable transmission}
 % 37
-\item\mbox{}
+\item\mbox{}To provide more reliability than a single parity bit can give, an error detecting coding scheme uses one parity bit for checking all the odd numbered bits and a second parity bit for all the even numbered bits. What is the hamming distance of this code?\\
+    \color{blue}
+    2, only need to flip two odd bits or two even bits in the message to preserve correctness.
+    \color{black}
 % 38
 \item\mbox{} What does 4B/5B encoding accomplish, besides expanding the number of bits by 25\%?\\
     \color{blue}
     4B/5B encoding will have at least two transitions for each code so that long strings of 0s or 1s will not occur in 4B/5B encoding.
     \color{black}
 % 39
-\item\mbox{}
+\item\mbox{}Describe the problem solved by error detection.\\
+    \color{blue}
+    Validate the correctness of the frame. Compare to error correction, error detection only overhead on messages with error.
+    \color{black}
 % 40
-\item\mbox{}
+\item\mbox{}Explain the hidden terminal problem and how it is solved.\\
+    \color{blue}
+    Same as problem 11.
+    \color{black}
 % 41
-\item\mbox{}
+\item\mbox{}Name and describe the type of multiplexing traditionally employed in data networks.\\
+    \color{blue}
+    Statistical multiplexing: Stations get access to channel as needed. Each station gets fixed length on transmission. Time-slot length is packet transmission time. Unused slots go idle only if no station has data to send.
+    \color{black}
 % 42
-\item\mbox{}
+\item\mbox{}The data rate of a QAM system using $M$-ary symbols can be doubled by increasing $M$ and holding the bandwidth and baud rate constant. How must larger must $M$ be, and why?\\
+    \color{blue}
+    $\because$ eache symbol denotes $\log_2M$ bits\\
+    $\therefore$ to double data rate, $M$ needs to increase to $M^2$, which results in $\log_2M^2 = 2\log_2M$ bits
+    \color{black}
 % 43
-\item\mbox{}
+\item\mbox{}Draw a protocol graph for the Internet, including at least the following: ATM, Ethernet, FDDI, FTP, HTTP, IP, TCP, TFTP, and UDP.\\
+    \color{blue}
+    \begin{tikzpicture}
+        \tikzstyle{main node}=[node distance=40pt,align=left]
+        \node[main node] (Application) {Application:};
+        \node[main node] (Transport) [below of=Application] {Transport:};
+        \node[main node] (Network) [below of=Transport] {Network:};
+        \node[main node] (Physical) [below of=Network] {Data Link/Physical:};
+    \end{tikzpicture}
+    \begin{tikzpicture}
+        \tikzstyle{main node}=[draw,auto,node distance=50pt,align=center]
+        \node[main node] (IP) {IP};
+        \node[main node] (Ethernet) [below of=IP] {Ethernet};
+        \node[main node] (ATM) [left of=Ethernet] {ATM};
+        \node[main node] (FDDI) [right of=Ethernet] {FDDI};
+        \node[main node] (TCP) [above left of=IP] {TCP};
+        \node[main node] (UDP) [above right of=IP] {UDP};
+        \node[main node] (FTP) [above left of=TCP] {FTP};
+        \node[main node] (HTTP) [right of=FTP] {HTTP};
+        \node[main node] (TFTP) [right of=HTTP] {TFTP};
+
+        \draw (IP) -- (ATM);
+        \draw (IP) -- (Ethernet);
+        \draw (IP) -- (FDDI);
+        \draw (IP) -- (TCP);
+        \draw (IP) -- (UDP);
+        \draw (TCP) -- (FTP);
+        \draw (TCP) -- (HTTP);
+        \draw (UDP) -- (TFTP);
+    \end{tikzpicture}
+    \color{black}
 % 44
-\item\mbox{}
+\item\mbox{}In the Perlman distributed spanning tree algorithm why, does the root bridge periodically send messages even after the tree is determined?\\
+    \color{blue}
+    It makes sure none of the links or bridges on the tree have failed.
+    \color{black}
 % 45
-\item\mbox{}
+\item\mbox{}Name the OSI layer or layers in which reliable transmission is addressed and state whether reliable transmission is typically handled in hardware, in software, or in both in the Internet architecture.\\
+    \color{blue}
+    Relaible transmission is addressed in the transport layer, and is typically handled in software.
+    \color{black}
 % 46
-\item\mbox{}
+\item\mbox{}What Hamming distance is necessary for n-bit error detection? n-bit error correction?
+    \color{blue}
+    \begin{itemize}
+    \item n-bit error detection:\\
+        No code word changed into another code word
+        $\Rightarrow$ required Hamming distance $= n + 1$
+    \item n-bit error correction:\\
+        No overlap between n-bit neighborhoods\\
+        $\Rightarrow$ required Hamming distance $= 2n + 1$
+    \end{itemize}
+    \color{black}
 % 47
-\item\mbox{}
+\item\mbox{}Why are many new local area networks built using multi-mode fiber, despite the fact that single-mode fiber provides higher capacities?\\
+    \color{blue}
+    Single-mode fiber is powered by lasers, which requires more expensive optical-electrical interfaces.\\
+    Multi-mode fiber is driven by cheap LEDs, and fits most short-range requirements.
+    \color{black}
 % 48
 \item\mbox{} Explain a drawback of datagram-based forwarding.
     \color{blue}
@@ -776,40 +959,88 @@
     \end{itemize}
     \color{black}
 % 49
-\item\mbox{}
+\item\mbox{}State the recursive definition of a network.\\
+    \color{blue}
+    Network is network connecting to other network.
+    \color{black}
 % 50
-\item\mbox{}
+\item\mbox{}Explain a drawback of virtual-circuit-based forwarding\\
+    \color{blue}
+    Overhead of setting up the virtual circuit depending on the round trip.
+    \color{black}
 % 51
-\item\mbox{}
+\item\mbox{}Why is byte stuffing necessary with some sentinel-based framing schemes?\\
+    \color{blue}
+    Because sentinel-based framing is marked with special byte or bit patterns, and these frame markers may exist in data. Therefore, it is necessary to escape such sequence.
+    \color{black}
 % 52
-\item\mbox{}
+\item\mbox{}Explain why a CSMA/CD type protocol cannot be used in a wireless environment.\\
+    \color{blue}
+    Most radios are half-duplex, which means that they cannot listen for collision while transmitting. Therefore, collisions may not be detected by the sender.
+    \color{black}
 % 53
-\item\mbox{}
+\item\mbox{}For a small data packet, which is more relevant, bandwidth or latency? Explain.\\
+    \color{blue}
+    Latency, because propagation delay dominates if the packet is small and transmission delay dominates if the packet is large.
+    \color{black}
 % 54
-\item\mbox{}
+\item\mbox{}Explain the benefits gained by framing.\\
+    \color{blue}
+    A benefit gained by framing is efficient error detection. By breaking up the entire message into recoverable chunks, each chunks can be checked for error and resent instead of checking the entire message.
+    \color{black}
 % 55
-\item\mbox{}
+\item\mbox{}Under what circumstances will error detection using CRC fail?\\
+    \color{blue}
+    Errors which is a multiple of CRC will cause the CRC error detection fail.
+    \color{black}
 % 56
-\item\mbox{}
+\item\mbox{}Describe the benefits of error correction over error detection.\\
+    \color{blue}
+    Error correction can recover errors immediately without a retransmission.
+    \color{black}
 % 57
-\item\mbox{}
+\item\mbox{}In Ethernet, how does a sender detect a collision?\\
+    \color{blue}
+    If a sender detects some bits transmit from other hosts, then the sender detect a collision.
+    \color{black}
 % 58
 \item\mbox{} Why does Ethernet use binary exponential backoff during contetion resolution?\\
     \color{blue}
     Ethernet doubles maximum backoff for the next round because doing so can let the next round have less possibility to occur a collision.
     \color{black}
 % 59
-\item\mbox{}
+\item\mbox{}Describe the role of the receiver in Ethernet. How is this different from the role of the receiver in IEEE 802.11?
+    \color{blue}
+        \begin{itemize}
+        \item Ethernet: receiver just pull the packet from the network
+        \item IEEE 802.11: receiver is more active, not only pulling packets from the network, it also sends CTS and ACK to senders and other nodes
+        \end{itemize}
+    \color{black}
 % 60
-\item\mbox{}
+\item\mbox{}Why does Ethernet have a minimum packet size? How is it determined?\\
+    \color{blue}
+    Because Ethernet needs to detect collisions, and the minimum packet size must let senders still sending after $2T$, where $T$ is the propagation delay to the other host.
+    \color{black}
 % 61
-\item\mbox{}
+\item\mbox{}What do ``learning'' bridges actually lean? What do the use this information for?\\
+    \color{blue}
+    ``Learning'' bridges learn which hosts live on which LAN. They use the information to maintain forwarding table and reduce redundant transmission.
+    \color{black}
 % 62
-\item\mbox{}
+\item\mbox{}What are the limitations of bridges?\\
+    \color{blue}
+    Bridges are not scalable and are not heterogeneous.
+    \color{black}
 % 63
-\item\mbox{}
+\item\mbox{}How do sniffers work? Will they work on all networks?\\
+    \color{blue}
+    Sniffers eavesdrop the packest on the shared media. Sniffers only work on networks broadcast.
+    \color{black}
 % 64
-\item\mbox{}
+\item\mbox{}Why does Ethernet used fixed time slots during backoff? What could go wrong if the fixed slots were not used?\\
+    \color{blue}
+    Fixed time slot can make sure that all messages are sent before a host can send a message again. If the fixed time slot is not used, there might be messages in transiting and it will cause more collision when hosts try to send a message.
+    \color{black}
 % 65
 \item\mbox{}
 % 66
@@ -832,7 +1063,10 @@
 % 73
 \item\mbox{}
 % 74
-\item\mbox{}
+\item\mbox{}Why is determining and handling byte order left up to the programmer and not handled by the operating system?\\
+    \color{blue}
+    Because when data link does the ``Encoding'', data link layer does not know what byte order the system use. Programmer has to change the network byte order into system byte order.
+    \color{black}
 % 75
 \item\mbox{}
 % 76
@@ -855,7 +1089,10 @@
 % 83
 \item\mbox{}
 % 84
-\item\mbox{}
+\item\mbox{}What is the impact of using different interframe spacing in IEEE 802.11?\\
+    \color{blue}
+    It creates different priority levels for different types of traffic.
+    \color{black}
 % 85
 \item\mbox{}
 % 86
@@ -891,9 +1128,15 @@
 % 93
 \item\mbox{}
 % 94
-\item\mbox{}
+\item\mbox{}What is the effect of setting ``infinity'' to 16 in distance vector routing?\\
+    \color{blue}
+    Advantage: Small limit allows fast completion of ``counting to infinity''\\
+    Disadvantage: Limit the size of the network
+    \color{black}
 % 95
-\item\mbox{}
+\item\mbox{}Why doesn't link-state routing scale to large networks?\\
+    \color{blue}
+    \color{black}
 % 96
 \item\mbox{}
 % 97
@@ -907,6 +1150,19 @@
 \item\mbox{}
 % 100
 \item\mbox{}
+% 101
+\item\mbox{}\textbf{Bit- and Byte-Stuffing}\\
+    Consider a data stream of 8-bit ASCII characters with values 0 to 255. Assume that the probability of a byte assuming each possible is equal (i.e., is exactly 1/256).
+    \begin{enumerate}
+    \item Using the bit-stuffing protocol discussed in class, what is the average number of bits that must be stuffed (inserted) per byte in the stream?\\
+    \item Answer the same question posed in part (a) for a byte-stuffing protocol in which the DLE character (value 16) must be escaped by stuffing a second DLE byte.\\
+    \end{enumerate}
+    Now assume that the data stream contains only value in the range 32 to 255, again with a uniform probability distribution amongst the possible values.
+    \begin{enumerate}
+    \item Recalcuate your answer to part (a) with the new probability distribution.\\
+    \item Recalcuate your answer to part (b) with the new probability distribution.\\
+    \end{enumerate}
+
 \end{enumerate}
 
 \end{document}
