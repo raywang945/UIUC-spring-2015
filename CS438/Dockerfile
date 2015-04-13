@@ -14,5 +14,6 @@ RUN apt-get update && apt-get install -y \
     firefox \
     tmux \
     vim \
-    python
+    python \
+    iptables
 WORKDIR /workspace/
